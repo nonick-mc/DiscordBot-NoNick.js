@@ -5,6 +5,62 @@ const setting_module = require('../modules/setting');
 
 module.exports = {
     async execute(interaction,client) {
+		const mentionok = "743446391820648568";
+		const hive = "827401010556305509";
+		const cubecarft = "914926676738199642";
+		const galaxite = "827401048234786856";
+		const hypixel = "914926610728243220";
+
+		if (interaction.customId == 'mentionok') {
+			if (interaction.member.roles.cache.has(mentionok)) {
+				interaction.member.roles.remove(mentionok)
+				interaction.reply({content: `<@&${mentionok}>を外しました!`, ephemeral:true});
+				return;
+			}
+			interaction.member.roles.add(mentionok);
+			interaction.reply({content: `<@&${mentionok}>を付与しました!`, ephemeral:true});
+		}
+
+		if (interaction.customId == 'hive') {
+			if (interaction.member.roles.cache.has(hive)) {
+				interaction.member.roles.remove(hive)
+				interaction.reply({content: `<@&${hive}>を外しました!`, ephemeral:true});
+				return;
+			}
+			interaction.member.roles.add(hive);
+			interaction.reply({content: `<@&${hive}>を付与しました!`, ephemeral:true});
+		}
+
+		if (interaction.customId == 'cubecraft') {
+			if (interaction.member.roles.cache.has(cubecarft)) {
+				interaction.member.roles.remove(cubecarft)
+				interaction.reply({content: `<@&${cubecarft}>を外しました!`, ephemeral:true});
+				return;
+			}
+			interaction.member.roles.add(cubecarft);
+			interaction.reply({content: `<@&${cubecarft}>を付与しました!`, ephemeral:true});
+		}
+
+		if (interaction.customId == 'galaxite') {
+			if (interaction.member.roles.cache.has(galaxite)) {
+				interaction.member.roles.remove(galaxite)
+				interaction.reply({content: `<@&${galaxite}>を外しました!`, ephemeral:true});
+				return;
+			}
+			interaction.member.roles.add(galaxite);
+			interaction.reply({content: `<@&${galaxite}>を付与しました!`, ephemeral:true});
+		}
+
+		if (interaction.customId == 'hypixel') {
+			if (interaction.member.roles.cache.has(hypixel)) {
+				interaction.member.roles.remove(hypixel)
+				interaction.reply({content: `<@&${hypixel}>を外しました!`, ephemeral:true});
+				return;
+			}
+			interaction.member.roles.add(hypixel);
+			interaction.reply({content: `<@&${hypixel}>を付与しました!`, ephemeral:true});
+		}
+		
         if (interaction.customId == 'setting1-enable') {
 			const { welcome, welcomeCh } = JSON.parse(fs.readFileSync('./config.json', 'utf-8'));
 			if (welcome) {
