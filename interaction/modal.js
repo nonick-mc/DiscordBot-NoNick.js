@@ -101,7 +101,7 @@ module.exports = {
                     .setColor('GREEN');
                 client.channels.cache.get(messageId).send({embeds: [embed]})
                     .then(() => {
-                        setting_module.change_setting("banidLogCh", messageId);
+                        setting_module.change_setting("reportCh", messageId);
                         modal.followUp({ content: `通報を受け取るチャンネルを<#${messageId}>に設定しました。`, ephemeral: true });
                     })
                     .catch(() => {

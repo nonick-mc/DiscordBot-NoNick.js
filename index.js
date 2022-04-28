@@ -9,6 +9,7 @@ require('dotenv').config();
 const interaction_button = require('./interaction/button');
 const interaction_selectmenu = require('./interaction/selectmenu');
 const interaction_modal = require('./interaction/modal');
+const pagination = require('./modules/pagination');
 
 // コマンドファイルを動的に取得する
 client.commands = new Collection();
@@ -20,14 +21,14 @@ for (const file of commandFiles) {
 
 try {
 	//Repl.itでホスティングをする場合は、このコードを有効化する必要がある
-	/*
+	
 	"use strict";
 	const http = require('http');
 	http.createServer(function(req, res) {
 		res.write("ready nouniku!!");
 		res.end();
 	}).listen(8080);
-	*/
+	
 
 	// ready nouniku!!(定期)
 	client.once('ready', () => {
@@ -59,6 +60,35 @@ try {
 		}
 	});
 
+  client.on('messageCreate', async message => {
+    {
+        const results = [...message.content.matchAll(/https:\/\/(?:.+\.)?discord(?:.+)?.com\/channels\/(?<guildId>\d+)\/(?<channelId>\d+)\/(?<messageId>\d+)/g)];
+        results.forEach(async v => {
+            try {
+                const channel = client.channels.cache.get(v.groups.channelId);
+                if(!channel || !channel.isText()) return;
+                const msg = await channel.messages.fetch(v.groups.messageId);
+                const infoEmbed = new MessageEmbed()
+                    .setTitle('メッセージ展開')
+                    .setColor('FFFFFF')
+                    .setDescription(`<@!${msg.author.id}> [リンク](${v[0]})`)
+                    .setThumbnail(msg.member?.displayAvatarURL({dynamic:true})??msg.author.displayAvatarURL({dynamic:true}));
+                const contentEmbeds = msg.content?Util.splitMessage(msg.content,{maxLength:1024,char:''}).map(v => new MessageEmbed().setTitle('メッセージ展開').setColor('FFFFFF').addField('メッセージの内容',v)):[];
+                const attachmentEmbeds = msg.attachments.map(v => new MessageEmbed().setTitle('メッセージ展開').setColor('FFFFFF').setImage(v.url));
+                pagination.message(message,[infoEmbed,...contentEmbeds,...attachmentEmbeds,...msg.embeds]);
+            }
+            catch (err) {
+                const em = new MessageEmbed()
+                    .setTitle('エラー!')
+                    .setColor('FF0000')
+                    .setDescription(err);
+                message.reply({embeds:[em]});
+                console.log(err);
+            }
+        });
+    }
+});
+  
 	// コマンド処理
 	client.on('interactionCreate', async interaction => {
 		// スラッシュコマンド
