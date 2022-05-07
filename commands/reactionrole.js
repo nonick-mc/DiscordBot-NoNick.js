@@ -1,10 +1,9 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const { MessageEmbed, MessageActionRow, MessageButton, Formatters } = require('discord.js');
+const { MessageEmbed, MessageActionRow, Formatters, MessageSelectMenu } = require('discord.js');
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('reactionrole')
-		.setDescription('リアクションロール')
-        .setDefaultPermission(false),
+		.setDescription('リアクションロール'),
     async execute(interaction) {
         if (!interaction.member.permissions.has("MANAGE_GUILD")) {
             const embed = new MessageEmbed()
@@ -13,42 +12,23 @@ module.exports = {
             interaction.reply({embeds: [embed], ephemeral: true});
             return;
         }
-
         const embed = new MessageEmbed()
             .setTitle('役職付与')
-            .setDescription('**ここでは誰でも付けることができる役職を付与することができます!**\n自分にあった役職を付与して自分を表現しよう!' + Formatters.codeBlock('markdown','注意:既に役職が付与されている状態でリアクションを追加すると役職付与を解除します!'))
+            .setDescription('ここでは誰でも付けることができるロールを付与することができます!\n**自分にあったロールを付与して自分を表現しよう!**\n下のセレクトメニューから選択ができます!' + Formatters.codeBlock('セレクトメニューの選択が解除されると、それにあったロールも外されます!'))
             .setColor('BLUE');
-        const button = new MessageActionRow()
-        .addComponents(
-            new MessageButton()
-            .setCustomId('mentionok')
-            .setEmoji('966719258430160986')
-            .setStyle('PRIMARY')
+        const select = new MessageActionRow().addComponents(
+            new MessageSelectMenu()
+                .setCustomId('nobot-reactionrole')
+                .setMinValues(0)
+                .setMaxValues(5)
+                .addOptions([
+                    {label: 'Mention', value: '743446391820648568', description: '主にお知らせに関する通知を受け取れます。', emoji: '966719258430160986', },
+                    {label: 'Hive', value: '827401010556305509', emoji: '636200239401009162'},
+                    {label: 'Cubecraft', value: '914926676738199642', emoji: '717326390072049824'},
+                    {label: 'Galaxite', value: '827401048234786856', emoji: '966718322412511292'},
+                    {label: 'Hypixel', value: '914926610728243220', emoji: '958631475220193280'}
+                ])
         )
-        .addComponents(
-            new MessageButton()
-            .setCustomId('hive')
-            .setEmoji('966718111543873627')
-            .setStyle('SECONDARY')
-        )
-        .addComponents(
-            new MessageButton()
-            .setCustomId('cubecraft')
-            .setEmoji('966718322857099305')
-            .setStyle('SECONDARY')
-        )
-        .addComponents(
-            new MessageButton()
-            .setCustomId('galaxite')
-            .setEmoji('966718322412511292')
-            .setStyle('SECONDARY')
-        )
-        .addComponents(
-            new MessageButton()
-            .setCustomId('hypixel')
-            .setEmoji('958631475220193280')
-            .setStyle('SECONDARY')
-        )
-        interaction.channel.send({embeds:[embed], components:[button]});
+        interaction.reply({embeds: [embed], components: [select]});
     }
 }

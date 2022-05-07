@@ -111,5 +111,18 @@ module.exports = {
 			// 	showModal(modal, {client, interaction});
 			// }
 		}
+
+		if (interaction.customId == 'nobot-reactionrole') {
+            for (let i = 0; i < interaction.component.options.length; i++) {
+                interaction.member.roles.remove(interaction.component.options[i].value);
+            }
+            for (let i = 0; i < interaction.values.length; i++) {
+                interaction.member.roles.add(interaction.values[i]);
+            }
+            const embed = new MessageEmbed()
+                .setDescription('ロールを更新しました!')
+                .setColor('#2f3136')
+            interaction.reply({embeds: [embed], ephemeral: true});
+        }
     }
 }
