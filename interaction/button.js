@@ -183,6 +183,14 @@ module.exports = {
 		}
 
 		if (interaction.customId == 'title') {
+			const threadmesssage = await interaction.channel.fetchStarterMessage()
+			if (threadmesssage.author.id !== interaction.user.id) {
+				const embed = new MessageEmbed()
+					.setDescription('このボタンは質問の投稿者以外は使えません!')
+					.setColor('RED')
+				return interaction.reply({embeds: [embed], ephemeral: true});
+			}
+
 			const modal = new Modal()
 				.setCustomId('changetitle')
 				.setTitle('スレッド名')
