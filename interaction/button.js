@@ -167,7 +167,7 @@ module.exports = {
 			interaction.reply({content: '💥 **設定を初期状態に復元しました。**', ephemeral:true});
 		}
 		
-		if(interaction.customId == 'report') {
+		if (interaction.customId == 'report') {
 			const modal = new Modal()
 				.setCustomId('reportModal')
 				.setTitle('あと1ステップです')
@@ -177,6 +177,21 @@ module.exports = {
 					.setLabel('このメッセージはサーバールールの何に違反していますか?')
 					.setPlaceholder('できる限り詳しく入力してください。')
 					.setStyle('LONG')
+					.setRequired(true)
+				);
+			showModal(modal, {client, interaction});
+		}
+
+		if (interaction.customId == 'title') {
+			const modal = new Modal()
+				.setCustomId('changetitle')
+				.setTitle('スレッド名')
+				.addComponents(
+				new TextInputComponent()
+					.setCustomId('textinput')
+					.setLabel('タイトル')
+					.setStyle('SHORT')
+					.setMaxLength(50)
 					.setRequired(true)
 				);
 			showModal(modal, {client, interaction});

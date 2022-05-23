@@ -170,5 +170,15 @@ module.exports = {
             client.channels.cache.get(reportCh).send({embeds: [reportEmbed]});
             modal.followUp({content: "**報告ありがとうございます!** 通報をサーバー運営に送信しました!", ephemeral:true});
         }
+
+        if (modal.customId == 'changetitle') {
+            const name = modal.getTextInputValue('textinput');
+            modal.message.channel.edit({name: name});
+            const embed = new MessageEmbed()
+                .setDescription('スレッド名を変更しました')
+                .setColor('GREEN')
+            await modal.deferReply({ephemeral: true});
+            modal.followUp({embeds: [embed], ephemeral: true});
+        }
     }
 }

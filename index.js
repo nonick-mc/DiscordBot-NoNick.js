@@ -1,5 +1,5 @@
 const fs = require('fs');
-const { Client, Collection, Intents, MessageEmbed } = require('discord.js');
+const { Client, Collection, Intents, MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MEMBERS] });
 const discordModals = require('discord-modals');
 discordModals(client);
@@ -62,6 +62,29 @@ try {
 
   client.on('messageCreate', async message => {
     {
+        if (message.channelId == '723525324880609349') {
+            if (message.content == '') message.delete().catch((error) => console.log(error));
+        }
+        if (message.channelId == '717713480274280459') {
+            await message.startThread({name: "スレッド"})
+            .then((thread) => {
+                const embed = new MessageEmbed()
+                    .setTitle('質問チャンネルへようこそ!')
+                    .setDescription('助けが必要ですか?\nこのパネルからスレッドのタイトル設定ができます!')
+                    .setColor('GREEN')
+                const button = new MessageActionRow().addComponents(
+                    new MessageButton()
+                        .setCustomId('title')
+                        .setLabel('タイトルを変更')
+                        .setStyle('PRIMARY')
+                )
+                thread.send({embeds: [embed], components: [button]});
+            })
+            .catch((e) => {
+                console.log(e)
+            })
+        }
+
         const results = [...message.content.matchAll(/https:\/\/(?:.+\.)?discord(?:.+)?.com\/channels\/(?<guildId>\d+)\/(?<channelId>\d+)\/(?<messageId>\d+)/g)];
         results.forEach(async v => {
             try {
